@@ -1,0 +1,570 @@
+{
+  "name": "Supermarket Comparing Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite-preview-06-17",
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        380
+      ],
+      "id": "90e95937-f5bc-401b-a35b-f31bfbd15050",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "PLACEHOLDER_CREDENTIAL_ID",
+          "name": "PLACEHOLDER_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite-preview-06-17",
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        168,
+        -10
+      ],
+      "id": "b64e1033-6527-466c-97de-310cd3ce49a5",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "PLACEHOLDER_CREDENTIAL_ID",
+          "name": "PLACEHOLDER_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Extrae las palabras clave del siguiente mensaje:{{ $json.body.mensaje }}",
+        "options": {
+          "systemMessage": "=Instrucciones:\nTu tarea es extraer las palabras clave más importantes de preguntas sobre comparación de productos. Debes identificar únicamente el tipo de producto y sus características principales.\nReglas:\n\nExtrae solo las palabras que definen el PRODUCTO y sus CARACTERÍSTICAS específicas\nOmite palabras de pregunta (qué, cuál, mejor, mejores, etc.)\nOmite artículos (el, la, los, las, un, una)\nOmite verbos (es, son, están, etc.)\nMantén sustantivos y adjetivos descriptivos del producto\nConvierte plurales a singular (yogures → yogur, hamburguesas → hamburguesa)\nUsa la palabra más general del producto\nMáximo 5 palabras en el output\nResponde solo con las palabras clave separadas por espacios\nNo añadas explicaciones adicionales\n\nEjemplos:\nInput: \"¿Qué yogures son mejores?\"\nOutput: yogur\nInput: \"¿Cuáles cereales de trigo son los mejores?\"\nOutput: cereal trigo\nInput: \"¿Qué smartphone Android es más recomendable?\"\nOutput: smartphone android\nInput: \"¿Cuál es la mejor laptop para gaming?\"\nOutput: laptop gaming\nInput: \"¿Qué aceite de oliva extra virgen recomiendan?\"\nOutput: aceite oliva extra virgen\nInput: \"¿Qué hamburguesas veganas están buenas?\"\nOutput: hamburguesa vegana"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        80,
+        -230
+      ],
+      "id": "014fdb25-3503-40f6-8d35-ea0f0cf24a88",
+      "name": "Palabras clave"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "productos_dia",
+        "returnAll": true,
+        "filterType": "string",
+        "filterString": "=or=({{ $json.words.map(word => `nombre.ilike.*${word}*`).join(',') }})"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        676,
+        -380
+      ],
+      "id": "5449dcf8-0a67-4820-bc4c-3884695ff102",
+      "name": "DIA",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "PLACEHOLDER_CREDENTIAL_ID",
+          "name": "PLACEHOLDER_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "productos_mercadona",
+        "returnAll": true,
+        "filterType": "string",
+        "filterString": "=or=({{ $json.words.map(word => `nombre.ilike.*${word}*`).join(',') }})"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        676,
+        -80
+      ],
+      "id": "dec2867f-f0c7-4ec8-b896-4001547e6f69",
+      "name": "MERCADONA",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "PLACEHOLDER_CREDENTIAL_ID",
+          "name": "PLACEHOLDER_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const productos = $input.first().json.productosFiltrados;\n\nconst productos_dia = productos\n  .filter(p => p.supermercado === \"Dia\")\n  .slice(0, 3);\n\nconst productos_mercadona = productos\n  .filter(p => p.supermercado === \"Mercadona\")\n  .slice(0, 3);\n\nconst productosFinal = productos_mercadona.concat(productos_dia)\n\nreturn [\n  {\n    json: {\n      productosFinal\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1620,
+        -20
+      ],
+      "id": "f66dcf98-dc0c-4d77-bfa4-3e6cf6fb30c0",
+      "name": "Balanceador"
+    },
+    {
+      "parameters": {
+        "jsCode": "const productos = $input.first().json.productosFinal;  // accede al array de productos desde el único item\n\nconst textos = [];\n\nfor (let i = 0; i < productos.length; i++) {\n  const p = productos[i];\n\n  textos.push(` ${p.supermercado} - ${p.nombre}\n ${p.precio} (${p[\"precio_por_unidad\"]})\n Ingredientes: ${p.ingredientes}\n ${p[\"valor_energetico\"]} kcal \n Grasas:${p.grasas}\n Hidratos:${p.hidratos}\n Azúcares:${p.azucares}\n Proteínas:${p.proteinas}\n ${p[\"url_producto\"]}`);\n}\n\nreturn [\n  {\n    json: {\n      mensaje: textos.join(\"\\n\\n\")\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1800,
+        -20
+      ],
+      "id": "6f02ce50-7040-40a0-8904-a8efb04a2f70",
+      "name": "Da formato"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "PLACEHOLDER_WEBHOOK_PATH",
+        "responseMode": "responseNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "access-control-allow-origin",
+                "value": "PLACEHOLDER_ORIGIN_URL"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -140,
+        -230
+      ],
+      "id": "49df3e4b-f013-411e-a0e2-e613088fb3a0",
+      "name": "Webhook",
+      "webhookId": "PLACEHOLDER_WEBHOOK_ID"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Webhook').item.json.body.mensaje }}\nCoge datos de estos productos:\n{{ $json.mensaje }}",
+        "options": {
+          "systemMessage": "=Eres un experto analista de productos que realiza comparaciones exhaustivas y objetivas. Tu función es ayudar a los consumidores a tomar decisiones informadas analizando productos similares basándote en criterios específicos según el tipo de producto.\nInput Esperado\nRecibirás un array JSON con productos filtrados por relevancia que incluye:\n\nInformación básica: nombre, precio, precio_por_kg (o precio unitario), url, establecimiento\nCaracterísticas específicas según el tipo de producto\nPuntuación de relevancia\n\nDETECCIÓN AUTOMÁTICA DE TIPO DE PRODUCTO\nA) PRODUCTOS ALIMENTARIOS\nCriterios de Evaluación Nutricional (Orden de Importancia)\nAlta Prioridad:\n\nAzúcares totales - Menor es mejor (máximo impacto en salud)\nDensidad calórica - Menor kcal/100g generalmente mejor\nSodio/Sal - Menor es mejor (cuando esté disponible)\nGrasas saturadas - Minimizar (usar grasas totales como proxy si no disponible)\n\nMedia Prioridad:\n\nProteínas - Mayor es mejor (saciedad y valor nutricional)\nFibra - Mayor es mejor (cuando esté disponible)\nLista de ingredientes - Menos ingredientes y más naturales = mejor\nRelación calidad-precio - Valor nutricional por euro gastado\n\nBanderas Rojas:\n\nAzúcares > 15g/100g (excepto frutas naturales)\nGrasas saturadas > 5g/100g (cuando disponible)\nMás de 10 ingredientes sin justificación\n\nBanderas Verdes:\n\nProteínas > 10g/100g\nAzúcares < 5g/100g\nLista de ingredientes < 5 elementos\n\nB) PRODUCTOS TECNOLÓGICOS\nCriterios de Evaluación:\n\nRendimiento/Especificaciones técnicas\nRelación calidad-precio\nDurabilidad y garantía\nFacilidad de uso\nCompatibilidad\nEficiencia energética (cuando aplique)\n\nC) PRODUCTOS DE CUIDADO PERSONAL\nCriterios de Evaluación:\n\nComposición e ingredientes\nEfectividad\nTolerancia/hipoalergenicidad\nRelación calidad-precio\nCertificaciones (dermatológicamente testado, etc.)\nFormato y practicidad\n\nD) PRODUCTOS DE LIMPIEZA\nCriterios de Evaluación:\n\nEficacia de limpieza\nComposición (biodegradabilidad, toxicidad)\nConcentración/rendimiento\nRelación calidad-precio\nCompatibilidad con superficies\nImpacto ambiental\n\nE) PRODUCTOS TEXTILES/ROPA\nCriterios de Evaluación:\n\nCalidad de materiales\nDurabilidad\nComodidad/ajuste\nRelación calidad-precio\nCuidado/mantenimiento\nEstilo/versatilidad\n\nESTRUCTURA DE RESPUESTA ADAPTATIVA\n1. COMPARACIÓN DETALLADA\nSelecciona automáticamente 2 productos para comparar, SIEMPRE tiene que haber uno de Dia y otro de Mercadona. Si no hay productos de ambos establecimientos, selecciona los 2 más representativos y comparables, y di que no hay productos del establecimiento del que no haya.\nPara Productos Alimentarios:\n\nProducto Mercadona: [Nombre completo con marca y establecimiento]\nPrecio: [precio] € - [precio_por_kg] €/kg\nIngredientes: [lista completa]\nInformación nutricional por 100g: Energía [X] kcal | Grasas [X] g | Carbohidratos [X] g | Azúcares [X] g | Proteínas [X] g\n\nPara Productos No Alimentarios:\n\nProducto Mercadona: [Nombre completo con marca y establecimiento]\nPrecio: [precio] € - [precio unitario si aplica]\nCaracterísticas principales: [especificaciones clave según tipo]\nInformación técnica: [datos relevantes según categoría]\n\n2. ANÁLISIS COMPARATIVO EN LÍNEA\nPara Productos Alimentarios:\n\n🏷️ Precio: [Comparación detallada con porcentajes]\n⚡ Energía: [Comparación calórica]\n🧈 Grasas: [Comparación de grasas]\n🍯 Azúcares: [Comparación de azúcares]\n💪 Proteínas: [Comparación proteica]\n📝 Ingredientes: [Análisis cualitativo]\n\nPara Productos Tecnológicos:\n\n🏷️ Precio: [Comparación con relación calidad-precio]\n⚡ Rendimiento: [Comparación de especificaciones]\n🔧 Funcionalidades: [Características distintivas]\n🛡️ Durabilidad: [Garantía y construcción]\n🎯 Facilidad de uso: [Experiencia de usuario]\n\nPara Productos de Cuidado Personal:\n\n🏷️ Precio: [Comparación por ml/unidad]\n🧪 Composición: [Ingredientes activos]\n💧 Efectividad: [Beneficios específicos]\n🌿 Tolerancia: [Hipoalergenicidad]\n📦 Formato: [Practicidad de uso]\n\nPara Productos de Limpieza:\n\n🏷️ Precio: [Comparación por uso/litro]\n🧽 Eficacia: [Poder de limpieza]\n🌍 Impacto ambiental: [Biodegradabilidad]\n💪 Concentración: [Rendimiento]\n🏠 Compatibilidad: [Superficies aplicables]\n\nPara Productos Textiles:\n\n🏷️ Precio: [Comparación de valor]\n🧵 Materiales: [Calidad de tejidos]\n👕 Comodidad: [Ajuste y confort]\n🔄 Durabilidad: [Resistencia al uso]\n🧺 Cuidado: [Facilidad de mantenimiento]\n\n3. RECOMENDACIÓN FINAL\n\nRecomendación General: [Producto ganador con justificación]\nJustificación: [Explicación detallada basada en criterios específicos]\nEnlaces:\n\nProducto Mercadona: [Enlace producto Mercadona]\nProducto Dia: [Enlace producto Dia]\n\n\n\n4. RECOMENDACIONES POR PERFIL DE CONSUMIDOR\nPara Productos Alimentarios:\n\n🏥 Si priorizas la salud: [Mejor perfil nutricional]\n💰 Si cuidas el presupuesto: [Mejor relación calidad-precio]\n👨‍👩‍👧‍👦 Para familias numerosas: [Opción más práctica]\n🏃‍♂️ Para deportistas: [Mejor perfil proteico]\n🌱 Para dietas específicas: [Más adecuado para restricciones]\n\nPara Productos No Alimentarios (adaptar según categoría):\n\n💰 Si cuidas el presupuesto: [Mejor relación calidad-precio]\n🎯 Si priorizas la calidad: [Mejor producto premium]\n👨‍👩‍👧‍👦 Para familias: [Más práctico para uso familiar]\n🌍 Si eres eco-consciente: [Más sostenible]\n🔰 Para principiantes: [Más fácil de usar]\n\nINSTRUCCIONES ESPECÍFICAS\n\nNO uses tablas markdown - toda la información debe presentarse en párrafos y listas\nNo uses puntos ni guiones para listar las líneas\nIncluye emojis para hacer la lectura más visual y atractiva\nSé específico con los números - siempre menciona diferencias exactas y porcentajes\nMantén un tono profesional pero accesible\nContextualiza las diferencias según el tipo de producto\nPrioriza objetividad - basa todas las recomendaciones en datos cuantificables\nIncluye siempre las URLs en la sección de recomendación final\n\nCONSIDERACIONES ESPECIALES POR CATEGORÍA\nProductos Alimentarios:\n\nPara productos donde las grasas son aceptables: enfócate en el tipo de grasa\nPara productos ricos en proteínas: prioriza el contenido proteico\nPara productos con riesgo de azúcar alto: sé estricto con los azúcares añadidos\nPara productos básicos: enfócate en procesamiento y ingredientes simples\n\nProductos Tecnológicos:\n\nEvalúa la obsolescencia y futuro del producto\nConsidera la curva de aprendizaje\nValora el soporte técnico y actualizaciones\n\nProductos de Cuidado Personal:\n\nConsidera el tipo de piel/cabello\nEvalúa la presencia de alérgenos comunes\nValora la certificación dermatológica\n\nProductos de Limpieza:\n\nPrioriza la seguridad doméstica\nEvalúa la eficacia en diferentes tipos de suciedad\nConsidera el impacto en personas con alergias\n\nProductos Textiles:\n\nEvalúa la versatilidad de uso\nConsidera las tendencias de moda vs. atemporalidad\nValora la facilidad de combinación\n\nAplica esta estructura de manera consistente en todos los análisis, adaptando el contenido específico a cada categoría de producto mientras mantienes el mismo nivel de detalle y rigor analítico."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        1400,
+        200
+      ],
+      "id": "4291f918-d3f8-4786-ae5a-72f3f1537889",
+      "name": "Comparador"
+    },
+    {
+      "parameters": {
+        "jsCode": "const productos = $input.first().json.productos;\nconst palabrasClave = $('SeparadorPalabras').first().json.words;\n\n// Función para calcular relevancia mejorada\nfunction calcularRelevancia(producto, palabras) {\n  let puntuacion = 0;\n  const nombreLower = producto.nombre.toLowerCase();\n  const palabrasAEliminar = [\n    // Unidades de medida\n    'g', 'l', 'ml', 'kg', 'cl', 'gr', 'lt', 'cc', 'mg', 'dl', 'cm', 'mm', 'oz', 'lb',\n    \n    // Números y cantidades\n    'x', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '12', '24', '25', '50', '100', '200', '250', '500', '1000',\n    \n    // Conectores y preposiciones\n    'con', 'y', 'de', 'en', 'para', 'por', 'sin', 'del', 'la', 'el', 'los', 'las', 'un', 'una', 'unos', 'unas',\n    'al', 'a', 'desde', 'hasta', 'sobre', 'bajo', 'entre', 'durante', 'mediante', 'según', 'hacia',\n    \n    // Marcas y establecimientos\n    'dia', 'mercadona', 'hacendado', 'carrefour', 'lidl', 'aldi', 'eroski', 'alcampo', 'hipercor',\n    'santaana', 'santa', 'ana', 'consum', 'masymas', 'gadis', 'caprabo', 'supersol', 'condis',\n    'simply', 'basic', 'basico', 'basics', 'ahorro', 'eco', 'bio', 'ecologico', 'organico',\n    \n    // Tipos de envase y presentación\n    'pack', 'paquete', 'bolsa', 'bote', 'lata', 'envase', 'tarrina', 'bandeja', 'caja', 'tubo',\n    'brick', 'tetrabrik', 'botella', 'garrafa', 'frasco', 'sobre', 'sachet', 'doypack',\n    'multipack', 'familiar', 'individual', 'porcion', 'racion', 'unidad', 'pieza', 'trozo',\n    \n    // Descriptores de calidad/tipo\n    'premium', 'gourmet', 'deluxe', 'gold', 'extra', 'super', 'mega', 'maxi', 'mini', 'micro',\n    'light', 'ligero', 'diet', 'zero', 'sin', 'libre', 'reducido', 'bajo', 'alto', 'rico',\n    'especial', 'seleccion', 'tradicional', 'artesano', 'casero', 'natural', 'fresco', 'tierno',\n    \n    // Términos comerciales\n    'oferta', 'promocion', 'descuento', 'rebaja', 'liquidacion', 'outlet', 'oportunidad',\n    'nuevo', 'novedad', 'lanzamiento', 'edicion', 'limitada', 'temporada', 'estacion',\n    \n    // Origen y procedencia\n    'espana', 'español', 'nacional', 'importado', 'extranjero', 'europeo', 'americano',\n    'andaluz', 'catalan', 'gallego', 'vasco', 'murciano', 'valenciano', 'castellano',\n    \n    // Procesos y tratamientos\n    'pasteurizado', 'esterilizado', 'uht', 'fresco', 'congelado', 'refrigerado', 'conserva',\n    'envasado', 'empaquetado', 'sellado', 'precintado', 'etiquetado', 'marcado',\n    \n    // Certificaciones y sellos\n    'certificado', 'sello', 'garantia', 'calidad', 'iso', 'haccp', 'brc', 'ifs',\n    'halal', 'kosher', 'vegano', 'vegetariano', 'glutenfree', 'lactosefree',\n    \n    // Términos genéricos\n    'producto', 'alimento', 'comida', 'bebida', 'articulo', 'referencia', 'codigo',\n    'sabor', 'gusto', 'aroma', 'textura', 'consistencia', 'cremoso', 'crujiente',\n    'suave', 'intenso', 'fuerte', 'dulce', 'salado', 'amargo', 'acido', 'picante',\n    \n    // Vacíos y caracteres especiales\n    '', ' ', '-', '_', '/', '\\\\', '(', ')', '[', ']', '{', '}', '&', '+', '=', '%', '#', '@'\n  ];\n  const palabrasEnNombre = nombreLower.split(' ').filter(palabra =>  !palabrasAEliminar.includes(palabra) &&\n    !/\\d/.test(palabra));\n  \n  // Calcular coincidencias exactas\n  let coincidenciasExactas = 0;\n  palabras.forEach(palabra => {\n    const palabraLower = palabra.toLowerCase();\n    if (palabrasEnNombre.includes(palabraLower)) {\n      coincidenciasExactas++;\n      puntuacion += 5; // Puntuación alta por coincidencia exacta\n    } else if (nombreLower.includes(palabraLower)) {\n      puntuacion += 2; // Puntuación menor por coincidencia parcial\n    }\n  });\n  \n  // Bonus por tener todas las palabras clave\n  if (coincidenciasExactas === palabras.length) {\n    puntuacion += 10;\n  }\n  \n  // Penalización por palabras extra irrelevantes\n  const palabrasExtra = palabrasEnNombre.length - palabras.length;\n  if (palabrasExtra > 0) {\n    puntuacion -= palabrasExtra * 0.5; // Penalización suave\n  }\n  \n  // Bonus si las palabras aparecen en secuencia\n  const fraseCompleta = palabras.join(' ');\n  if (nombreLower.includes(fraseCompleta)) {\n    puntuacion += 8;\n  }\n  \n  return Math.max(0, puntuacion); // No permitir puntuaciones negativas\n}\nif (!Array.isArray(productos)) {\n  throw new Error(\"La variable 'productos' no es un array válido\");\n}\n// Calcular relevancia para cada producto\nconst productosConPuntuacion = productos.map(producto => ({\n  ...producto,\n  relevancia: calcularRelevancia(producto, palabrasClave)\n}));\n\n// Filtrar productos con puntuación > 0 y ordenar por relevancia\nconst productosFiltrados = productosConPuntuacion\n  .filter(p => p.relevancia > 0)\n  .sort((a, b) => b.relevancia - a.relevancia)\n  // .slice(0, 8); // Limitar a 8 productos máximo\n\nreturn [{\n  json: {\n    productosFiltrados: productosFiltrados\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        -20
+      ],
+      "id": "f82ad3f7-277d-4db9-a726-f3d620f29c4f",
+      "name": "Relevancia"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "productos",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1740,
+        -220
+      ],
+      "id": "2e5d3291-5ed6-4261-a261-3287b9e37166",
+      "name": "Agrega en una lista",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $input.first().json.output;\nconst words = text.split(\" \");\n\nreturn [{\n  json: {\n    originalText: text,\n    words: words,\n    wordCount: words.length\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        456,
+        -230
+      ],
+      "id": "52538293-e088-492c-9adc-6191cdce333f",
+      "name": "SeparadorPalabras"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "716dfccd-586a-4ab7-9869-38bcea465d04",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        -380
+      ],
+      "id": "2ef78134-3f33-48cd-a9d6-a6e9e7a191d2",
+      "name": "if row exist"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "716dfccd-586a-4ab7-9869-38bcea465d04",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        -80
+      ],
+      "id": "28ae700f-1fa3-440a-9ca3-279015e356b7",
+      "name": "if row exist1"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"output\": \"Ha habido un error, intenta reformular la petición\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1100,
+        -240
+      ],
+      "id": "9f7c93ae-1062-4f24-8f0c-ef6424699e0c",
+      "name": "Error"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1780,
+        200
+      ],
+      "id": "5f9cf975-7a0c-470c-9855-ed67ba378e93",
+      "name": "Respuesta"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "id",
+        "joinMode": "keepEverything",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1480,
+        -220
+      ],
+      "id": "fe56645c-d374-4297-9b7c-3e8f81691cb6",
+      "name": "Juntar listas"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "PLACEHOLDER_WEBHOOK_HOST",
+            "user-agent": "PLACEHOLDER_USER_AGENT",
+            "content-length": "PLACEHOLDER_CONTENT_LENGTH",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br",
+            "accept-language": "es-ES,es;q=0.9",
+            "access-control-allow-headers": "Content-Type, Authorization",
+            "access-control-allow-methods": "GET, POST, OPTIONS",
+            "access-control-allow-origin": "PLACEHOLDER_ORIGIN_URL",
+            "content-type": "application/json",
+            "origin": "PLACEHOLDER_ORIGIN_URL",
+            "referer": "PLACEHOLDER_REFERER_URL",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "same-site",
+            "via": "PLACEHOLDER_VIA_HEADER",
+            "x-forwarded-for": "PLACEHOLDER_IP_ADDRESS",
+            "x-forwarded-host": "PLACEHOLDER_FORWARDED_HOST",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "mensaje": ""
+          },
+          "webhookUrl": "PLACEHOLDER_WEBHOOK_URL",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Comparador",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Palabras clave",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Palabras clave": {
+      "main": [
+        [
+          {
+            "node": "SeparadorPalabras",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DIA": {
+      "main": [
+        [
+          {
+            "node": "if row exist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MERCADONA": {
+      "main": [
+        [
+          {
+            "node": "if row exist1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Balanceador": {
+      "main": [
+        [
+          {
+            "node": "Da formato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Da formato": {
+      "main": [
+        [
+          {
+            "node": "Comparador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Palabras clave",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Comparador": {
+      "main": [
+        [
+          {
+            "node": "Respuesta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Relevancia": {
+      "main": [
+        [
+          {
+            "node": "Balanceador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agrega en una lista": {
+      "main": [
+        [
+          {
+            "node": "Relevancia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SeparadorPalabras": {
+      "main": [
+        [
+          {
+            "node": "DIA",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "MERCADONA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "if row exist": {
+      "main": [
+        [
+          {
+            "node": "Juntar listas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "if row exist1": {
+      "main": [
+        [
+          {
+            "node": "Juntar listas",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntar listas": {
+      "main": [
+        [
+          {
+            "node": "Agrega en una lista",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b483d380-fa91-4af2-866e-d9f4e91216a3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "PLACEHOLDER_INSTANCE_ID"
+  },
+  "id": "MAbAkny5EDg41ZXB",
+  "tags": []
+}

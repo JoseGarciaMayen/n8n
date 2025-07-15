@@ -1,0 +1,1263 @@
+{
+  "name": "Notion",
+  "nodes": [
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger').item.json.message.chat.id }}",
+        "text": "=Entrada guardada en {{ $('Reconoce db y text').item.json.output }}",
+        "additionalFields": {}
+      },
+      "id": "e61bd2da-a2c1-480e-975f-14b80bf14155",
+      "name": "Confirmar Guardado",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        2012,
+        1355
+      ],
+      "webhookId": "[YOUR_WEBHOOK_ID_HERE]",
+      "credentials": {
+        "telegramApi": {
+          "id": "[YOUR_CREDENTIAL_ID_HERE]",
+          "name": "NotionBot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "[YOUR_NOTION_DATABASE_ID_HERE]",
+          "mode": "id"
+        },
+        "title": "asdasd",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Nombre|title",
+              "title": "={{ $json.Nombre }}"
+            },
+            {
+              "key": "Autores|rich_text",
+              "textContent": "={{ $json.Autores }}"
+            },
+            {
+              "key": "Estado|status",
+              "statusValue": "={{ $json.Estado }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4b2c1769-c6d4-4c9b-a988-53d4086ebb8c",
+      "name": "Crear Entrada Libros",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2,
+      "position": [
+        1792,
+        255
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "[YOUR_CREDENTIAL_ID_HERE]",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "[YOUR_NOTION_DATABASE_ID_HERE]",
+          "mode": "id"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Nombre|title",
+              "title": "={{ $json.Nombre }}"
+            },
+            {
+              "key": "Precio|rich_text",
+              "textContent": "={{ $json.Precio }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9ce537d0-072c-4251-944a-337dc9f799ff",
+      "name": "Crear Entrada Gastos",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2,
+      "position": [
+        1792,
+        1030
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "[YOUR_CREDENTIAL_ID_HERE]",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "221fefecc5078070b50ed459a3431dfe",
+          "mode": "id"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Nombre|title",
+              "title": "={{ $json['Nombre del sitio'] }}"
+            },
+            {
+              "key": "Descripción|rich_text",
+              "textContent": "={{ $json['Descripción'] }}"
+            },
+            {
+              "key": "url|url",
+              "urlValue": "={{ $json['url'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "42492df2-0f25-48bf-a403-c586de831195",
+      "name": "Crear Entrada InteresCS",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2,
+      "position": [
+        1792,
+        1455
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "[YOUR_CREDENTIAL_ID_HERE]",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "[YOUR_NOTION_DATABASE_ID_HERE]",
+          "mode": "id"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Nombre|title",
+              "title": "={{ $json.Nombre }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1043792c-4fd0-4ccd-a7e8-f92a8188cf71",
+      "name": "Crear Entrada Tareas",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2,
+      "position": [
+        1792,
+        1655
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "[YOUR_CREDENTIAL_ID_HERE]",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "[YOUR_NOTION_DATABASE_ID_HERE]",
+          "mode": "id"
+        },
+        "title": "=",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Name|title",
+              "title": "={{ $json.texto_limpio }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cf084900-a545-4948-8eb5-65c86e01d4ba",
+      "name": "Crear Entrada Otros",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2,
+      "position": [
+        1792,
+        1880
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "[YOUR_CREDENTIAL_ID_HERE]",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message",
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "id": "adaddfe7-1031-4cc7-8ae9-630a355dde91",
+      "name": "Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [
+        160,
+        930
+      ],
+      "webhookId": "[YOUR_WEBHOOK_ID_HERE]",
+      "credentials": {
+        "telegramApi": {
+          "id": "[YOUR_CREDENTIAL_ID_HERE]",
+          "name": "NotionBot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Libros",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "68b4e562-e3e1-4ee8-8b4f-ec77d423071b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Libros"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6dda5897-d0da-49da-9505-f5a3379d08de",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Gastos",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Gastos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "be5767f6-efe6-4143-9eb5-eaff01f6770d",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "InteresCS",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "InteresCS"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b114f0da-7b97-43f2-8f41-22b79c6d6376",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Tareas",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Tareas"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ba36d81f-b6f6-40b9-9560-86fc86f8ec6f",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Otros",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Otros"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        756,
+        867
+      ],
+      "id": "d0029f16-5ac9-4dda-bfd8-38d49153965e",
+      "name": "Seleccionar la db"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Trigger').item.json.message.text }}",
+        "options": {
+          "systemMessage": "=# Prompt para Agente de IA - Extractor de Información de Libros (JSON Limpio)\n\nEres un asistente especializado en extraer información de libros a partir de texto de entrada del usuario. Tu tarea es analizar el input del usuario y extraer los siguientes datos para almacenar en una base de datos:\n\n## Datos a extraer:\n1. **Nombre del libro** (nombre): El título completo y correcto del libro\n2. **Estado** (estado): Determinar entre \"En curso\", \"Sin empezar\", \"Hecho\"\n3. **Autores** (autores): Lista de autores del libro\n\n## Instrucciones:\n\n### 1. Análisis del texto:\n- Identifica menciones de libros, títulos, series o sagas\n- Detecta indicadores de estado de lectura en frases como:\n  - \"quiero empezar\" → Sin empezar\n  - \"estoy leyendo\" → En curso  \n  - \"terminé de leer\" → Hecho\n  - \"he leído\" → Hecho\n  - \"voy a leer\" → Sin empezar\n\n### 2. Búsqueda de información:\n- Si el título mencionado no es exacto, busca el título oficial correcto\n- Identifica si se refiere a un libro individual o una serie\n- Para series, determina el primer libro o el más relevante mencionado\n\n### 3. Formato de respuesta:\nTu respuesta debe ser ÚNICAMENTE el objeto JSON sin ningún formato adicional.\n\n**FORMATO EXACTO REQUERIDO:**\n{\"nombre\": \"Título oficial completo del libro\", \"estado\": \"Sin empezar\", \"autores\": [\"Autor 1\", \"Autor 2\"]}\n\n**REGLAS CRÍTICAS:**\n- NO uses bloques de código con ```\n- NO incluyas la palabra \"json\" \n- NO uses saltos de línea (\\n)\n- NO uses ningún tipo de formato markdown\n- SOLO el objeto JSON plano en una línea\n- Ejemplo correcto: {\"nombre\": \"1984\", \"estado\": \"Sin empezar\", \"autores\": [\"George Orwell\"]}\n\n### 4. Reglas obligatorias:\n- **SIEMPRE** debes responder ÚNICAMENTE con el objeto JSON\n- Si no puedes determinar el estado exacto, usa \"Sin empezar\" por defecto\n- Si hay demasiada ambigüedad para extraer información confiable, responde con:\n{\"error\": \"Información muy ambigua\", \"mensaje\": \"El texto proporcionado es demasiado ambiguo para extraer información confiable del libro. Por favor, proporciona el título más específico.\", \"texto_original\": \"[texto del usuario]\"}\n\n### 5. Casos de ambigüedad:\n- Título muy vago o genérico\n- Múltiples libros posibles sin claridad\n- Información insuficiente para determinar autor o título exacto\n- Referencias muy indirectas\n\n### 6. Validación:\n- Si puedes extraer información, verifica que sea correcta\n- Si no puedes, usa el formato de error\n- NUNCA dejes de proporcionar un JSON literal como respuesta\n\n## Ejemplos:\n\n**Input:** \"Quiero empezar a leer Juego de Tronos Canción de Fuego y Hielo\"\n**Output:** {\"nombre\": \"Juego de Tronos (Canción de Hielo y Fuego #1)\", \"estado\": \"Sin empezar\", \"autores\": [\"George R.R. Martin\"]}\n\n**Input:** \"Estoy leyendo 1984\"\n**Output:** {\"nombre\": \"1984\", \"estado\": \"En curso\", \"autores\": [\"George Orwell\"]}\n\n**Input:** \"Terminé de leer El Hobbit\"\n**Output:** {\"nombre\": \"El Hobbit\", \"estado\": \"Hecho\", \"autores\": [\"J.R.R. Tolkien\"]}\n\n**Input:** \"Quiero leer algo\"\n**Output:** {\"error\": \"Información muy ambigua\", \"mensaje\": \"El texto proporcionado es demasiado ambiguo para extraer información confiable del libro. Por favor, proporciona el título más específico.\", \"texto_original\": \"Quiero leer algo\"}\n\nProcesa ahora el siguiente input del usuario:"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        976,
+        180
+      ],
+      "id": "2edbd534-e3fb-434c-b8e6-6b2403a49ae4",
+      "name": "Entradas libros"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Trigger').item.json.message.text }}",
+        "options": {
+          "systemMessage": "=Eres un asistente especializado en extraer información de gastos a partir de texto de entrada del usuario. Tu tarea es analizar el input del usuario y extraer los siguientes datos para almacenar en una base de datos:\n\n## Datos a extraer:\n1. **Nombre** (nombre): Descripción del gasto (producto, tienda, servicio, etc.)\n2. **Precio** (precio): Cantidad gastada en formato numérico\n\n## Instrucciones:\n\n### 1. Análisis del texto:\n- Identifica menciones de compras, pagos, gastos\n- Detecta indicadores de transacciones como:\n  - \"compré\", \"pagué\", \"gasté\", \"me costó\"\n  - \"en [tienda]\", \"por [precio]\"\n  - Menciones de productos, servicios o establecimientos\n\n### 2. Extracción del nombre:\n- **Producto específico**: \"compré pan\" → \"Pan\"\n- **Tienda/establecimiento**: \"fui a Mercadona\" → \"Mercadona\"\n- **Servicio**: \"corte de pelo\" → \"Corte de pelo\"\n- **Actividad**: \"cena en restaurante\" → \"Cena restaurante\"\n- Si hay múltiples elementos, prioriza el más específico\n\n### 3. Extracción del precio:\n- Busca números seguidos de símbolos de moneda (€, $, etc.)\n- Acepta formatos: \"3.50€\", \"15 euros\", \"$25\", \"20€\"\n- Convierte texto a número: \"quince euros\" → 15\n- Si no hay precio explícito, usa null\n\n### 4. Formato de respuesta:\nTu respuesta debe ser ÚNICAMENTE el objeto JSON sin ningún formato adicional.\n\n**FORMATO EXACTO REQUERIDO:**\n{\"nombre\": \"Descripción del gasto\", \"precio\": 15.50}\n\n**REGLAS CRÍTICAS:**\n- NO uses bloques de código con ```\n- NO incluyas la palabra \"json\" \n- NO uses saltos de línea (\\n)\n- NO uses ningún tipo de formato markdown\n- SOLO el objeto JSON plano en una línea\n- Ejemplo correcto: {\"nombre\": \"Café\", \"precio\": 3.50}\n\n### 5. Reglas obligatorias:\n- **SIEMPRE** debes responder ÚNICAMENTE con el objeto JSON\n- NO uses bloques de código, markdown, ni la palabra \"json\"\n- Formato: {\"nombre\": \"...\", \"precio\": ...} en una sola línea\n- Si no puedes extraer información confiable, responde con:\n{\"error\": \"Información muy ambigua\", \"mensaje\": \"El texto proporcionado es demasiado ambiguo para extraer información confiable del gasto. Por favor, especifica qué compraste y cuánto costó.\"}\n\n### 6. Casos de ambigüedad:\n- No se menciona qué se compró ni dónde\n- No hay indicadores claros de transacción económica\n- Información muy vaga o genérica\n- No se puede determinar el precio ni aproximarlo\n\n### 7. Casos especiales:\n- Si solo hay precio sin descripción: usar \"Gasto varios\"\n- Si solo hay descripción sin precio: precio = null\n- Para múltiples compras, extraer la más relevante o sumarizar\n- Normalizar nombres (primera letra mayúscula)\n\n## Ejemplos:\n\n**Input:** \"Compré café por 3.50€\"\n**Output:** {\"nombre\": \"Café\", \"precio\": 3.50}\n\n**Input:** \"Fui a Mercadona y gasté 45 euros\"\n**Output:** {\"nombre\": \"Mercadona\", \"precio\": 45.00}\n\n**Input:** \"Pagué la cena del restaurante, me costó 25€\"\n**Output:** {\"nombre\": \"Cena restaurante\", \"precio\": 25.00}\n\n**Input:** \"Kebab de ayer\"\n**Output:** {\"nombre\": \"Kebab\", \"precio\": null}\n\n**Input:** \"Gasté algo de dinero\"\n**Output:** {\"error\": \"Información muy ambigua\", \"mensaje\": \"El texto proporcionado es demasiado ambiguo para extraer información confiable del gasto. Por favor, especifica qué compraste y cuánto costó.\"}\n\nProcesa ahora el siguiente input del usuario:"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        976,
+        580
+      ],
+      "id": "3bff048a-f2be-4fc0-8f04-ce652896e31e",
+      "name": "Entradas gastos"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Trigger').item.json.message.text }}",
+        "options": {
+          "systemMessage": "=Eres un asistente especializado en extraer información de recursos de Computer Science a partir de texto de entrada del usuario. Tu tarea es analizar el input del usuario y extraer los siguientes datos para almacenar en una base de datos:\n\n## Datos a extraer:\n1. **Nombre** (nombre): Nombre del sitio web, herramienta, recurso o tecnología\n2. **URL** (url): URL completa del recurso (si está disponible)\n3. **Descripción** (descripcion): Descripción breve y útil del recurso (que debes generar tú)\n\n## Instrucciones:\n\n### 1. Análisis del texto:\n- Identifica URLs, nombres de sitios web, herramientas, frameworks, documentación\n- Detecta menciones de recursos técnicos como:\n  - Links directos (https://ejemplo.com)\n  - Nombres de sitios (GitHub, Stack Overflow)\n  - Herramientas de desarrollo (React, Docker, VS Code)\n  - Documentación técnica, tutoriales, artículos\n\n### 2. Extracción del nombre:\n- **Para URLs**: Extraer el nombre oficial del sitio (stackoverflow.com → \"Stack Overflow\")\n- **Para herramientas**: Usar el nombre oficial (react → \"React\")\n- **Para recursos**: Identificar el nombre correcto y completo\n- Si es ambiguo, usar el texto más descriptivo posible\n\n### 3. Búsqueda y extracción de URL:\n- **Si hay URL presente**: Extraer la URL completa exactamente como aparece\n- **Si NO hay URL pero conoces el sitio oficial**: Proporciona la URL oficial del recurso\n- **Si es una herramienta/tecnología conocida**: Busca y proporciona su URL oficial\n- **Si no conoces la URL oficial**: Usar null\n- Ejemplos:\n  - \"stackoverflow.com\" → \"https://stackoverflow.com\"\n  - \"GitHub es genial\" → \"https://github.com\"\n  - \"React documentation\" → \"https://reactjs.org\"\n  - \"Docker containers\" → \"https://www.docker.com\"\n  - \"Herramienta desconocida XYZ\" → null\n\n### 4. Generación de descripción:\n- **DEBES generar una descripción útil e informativa**\n- Máximo 1-2 oraciones\n- Enfócate en qué es y para qué sirve en el contexto de Computer Science\n- Ejemplos:\n  - Stack Overflow → \"Comunidad de preguntas y respuestas para programadores donde puedes encontrar soluciones a problemas técnicos\"\n  - GitHub → \"Plataforma de control de versiones y colaboración para desarrollo de software\"\n  - React → \"Biblioteca de JavaScript para construir interfaces de usuario interactivas\"\n\n### 5. Formato de respuesta:\nTu respuesta debe ser ÚNICAMENTE el objeto JSON sin ningún formato adicional.\n\n**FORMATO EXACTO REQUERIDO:**\n{\"nombre\": \"Nombre del recurso\", \"url\": \"URL completa o null\", \"descripcion\": \"Descripción breve y útil del recurso\"}\n\n**REGLAS CRÍTICAS:**\n- NO uses bloques de código con ```\n- NO incluyas la palabra \"json\" \n- NO uses saltos de línea (\\n)\n- NO uses ningún tipo de formato markdown\n- SOLO el objeto JSON plano en una línea\n- Usa null (sin comillas) cuando no haya URL disponible\n- Ejemplo correcto: {\"nombre\": \"Stack Overflow\", \"url\": \"https://stackoverflow.com\", \"descripcion\": \"Comunidad de preguntas y respuestas para programadores\"}\n\n### 6. Reglas obligatorias:\n- **SIEMPRE** debes responder ÚNICAMENTE con el objeto JSON\n- **SIEMPRE** debes generar una descripción útil, nunca dejarla vacía\n- **SIEMPRE** incluir el campo url, buscando la URL oficial si conoces el recurso\n- **Tu conocimiento debe incluir URLs oficiales de herramientas populares** (React → https://reactjs.org, GitHub → https://github.com, etc.)\n- Si no puedes extraer información confiable, responde con:\n{\"error\": \"Información muy ambigua\", \"mensaje\": \"El texto proporcionado es demasiado ambiguo para extraer información confiable del recurso CS. Por favor, especifica la URL, herramienta o recurso técnico.\"}\n\n### 7. Casos de ambigüedad:\n- Texto muy vago sin mencionar recurso específico\n- Referencias muy indirectas a tecnología\n- No hay indicadores claros de contenido relacionado con CS\n- Información insuficiente para determinar qué recurso es\n\n### 8. Casos especiales:\n- Para URLs: Usar exactamente como se proporcionan\n- Para herramientas conocidas: **Buscar y proporcionar la URL oficial del sitio web**\n- Para tecnologías populares: **Incluir su URL de documentación oficial**\n- Para recursos genéricos: Ser lo más específico posible con nombre y URL oficial\n- **Tu conocimiento debe incluir las URLs oficiales de herramientas populares de CS**\n- Siempre generar descripción relevante para programadores/CS\n\n## Ejemplos:\n\n**Input:** \"stackoverflow.com\"\n**Output:** {\"nombre\": \"Stack Overflow\", \"url\": \"https://stackoverflow.com\", \"descripcion\": \"Comunidad de preguntas y respuestas para programadores donde puedes encontrar soluciones a problemas técnicos\"}\n\n**Input:** \"Encontré este tutorial de React muy útil: https://reactjs.org\"\n**Output:** {\"nombre\": \"React Documentation\", \"url\": \"https://reactjs.org\", \"descripcion\": \"Documentación oficial de React, biblioteca de JavaScript para construir interfaces de usuario\"}\n\n**Input:** \"GitHub es genial para proyectos\"\n**Output:** {\"nombre\": \"GitHub\", \"url\": \"https://github.com\", \"descripcion\": \"Plataforma de control de versiones y colaboración para desarrollo de software usando Git\"}\n\n**Input:** \"docker container management\"\n**Output:** {\"nombre\": \"Docker\", \"url\": \"https://www.docker.com\", \"descripcion\": \"Plataforma de contenedores que permite empaquetar aplicaciones con sus dependencias para despliegue consistente\"}\n\n**Input:** \"Mira este enlace: https://docs.docker.com/get-started/\"\n**Output:** {\"nombre\": \"Docker Documentation\", \"url\": \"https://docs.docker.com/get-started/\", \"descripcion\": \"Documentación oficial de Docker con guías para comenzar a usar contenedores\"}\n\n**Input:** \"algo interesante\"\n**Output:** {\"error\": \"Información muy ambigua\", \"mensaje\": \"El texto proporcionado es demasiado ambiguo para extraer información confiable del recurso CS. Por favor, especifica la URL, herramienta o recurso técnico.\"}\n\nProcesa ahora el siguiente input del usuario:"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        976,
+        1080
+      ],
+      "id": "9b364b6d-d02c-42cf-85e0-6681ec9e9362",
+      "name": "Entradas InteresCS"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Trigger').item.json.message.text }}",
+        "options": {
+          "systemMessage": "=Eres un asistente especializado en extraer información de tareas a partir de texto de entrada del usuario. Tu tarea es analizar el input del usuario y extraer los siguientes datos para almacenar en una base de datos:\n\n## Datos a extraer:\n1. **Nombre** (nombre): Nombre limpio y conciso de la tarea\n\n## Instrucciones:\n\n### 1. Análisis del texto:\n- Identifica menciones de tareas, pendientes, cosas por hacer\n- Detecta indicadores de tareas como:\n  - \"tengo que\", \"hacer\", \"necesito\", \"debo\"\n  - \"recordar\", \"pendiente\", \"completar\"\n  - \"empezar\", \"terminar\", \"revisar\"\n  - Verbos de acción seguidos de sustantivos\n\n### 2. Extracción del nombre:\n- **Elimina palabras innecesarias**: \"tengo que hacer\" → extraer solo la acción\n- **Mantén lo esencial**: \"hacer curso ML\" → \"Curso ML\"\n- **Normaliza el formato**: Primera letra mayúscula, resto normal\n- **Ejemplos de transformación**:\n  - \"tengo que hacer curso ML\" → \"Curso ML\"\n  - \"necesito llamar al dentista\" → \"Llamar al dentista\"\n  - \"recordar comprar leche\" → \"Comprar leche\"\n  - \"terminar el proyecto de trabajo\" → \"Terminar proyecto trabajo\"\n  - \"revisar emails pendientes\" → \"Revisar emails\"\n\n### 3. Reglas de limpieza:\n- Eliminar: \"tengo que\", \"necesito\", \"debo\", \"hay que\", \"recordar\"\n- Mantener: verbos de acción + objeto/descripción\n- Capitalizar primera letra\n- Mantener brevedad pero claridad\n- Máximo 4-5 palabras si es posible\n\n### 4. Formato de respuesta:\nTu respuesta debe ser ÚNICAMENTE el objeto JSON sin ningún formato adicional.\n\n**FORMATO EXACTO REQUERIDO:**\n{\"nombre\": \"Nombre limpio de la tarea\"}\n\n**REGLAS CRÍTICAS:**\n- NO uses bloques de código con ```\n- NO incluyas la palabra \"json\" \n- NO uses saltos de línea (\\n)\n- NO uses ningún tipo de formato markdown\n- SOLO el objeto JSON plano en una línea\n- Ejemplo correcto: {\"nombre\": \"Curso ML\"}\n\n### 5. Reglas obligatorias:\n- **SIEMPRE** debes responder ÚNICAMENTE con el objeto JSON\n- **SIEMPRE** debes limpiar y normalizar el nombre de la tarea\n- Si no puedes extraer información confiable, responde con:\n{\"error\": \"Información muy ambigua\", \"mensaje\": \"El texto proporcionado es demasiado ambiguo para extraer una tarea clara. Por favor, especifica qué necesitas hacer.\"}\n\n### 6. Casos de ambigüedad:\n- Texto muy vago sin acción específica\n- No hay verbos de acción claros\n- Referencias muy indirectas a tareas\n- Información insuficiente para determinar qué hacer\n\n### 7. Casos especiales:\n- Para tareas complejas: Extraer la parte más importante\n- Para múltiples tareas: Tomar la primera o más relevante\n- Para tareas con fechas: Omitir fechas en el nombre\n- Mantener siempre formato conciso y claro\n\n## Ejemplos:\n\n**Input:** \"Tengo que hacer curso de ML\"\n**Output:** {\"nombre\": \"Curso ML\"}\n\n**Input:** \"Necesito llamar al dentista mañana\"\n**Output:** {\"nombre\": \"Llamar al dentista\"}\n\n**Input:** \"Recordar comprar leche en el supermercado\"\n**Output:** {\"nombre\": \"Comprar leche\"}\n\n**Input:** \"Debo terminar el informe del proyecto\"\n**Output:** {\"nombre\": \"Terminar informe proyecto\"}\n\n**Input:** \"Revisar los emails pendientes de trabajo\"\n**Output:** {\"nombre\": \"Revisar emails trabajo\"}\n\n**Input:** \"Estudiar para el examen de matemáticas\"\n**Output:** {\"nombre\": \"Estudiar examen matemáticas\"}\n\n**Input:** \"Algo que hacer\"\n**Output:** {\"error\": \"Información muy ambigua\", \"mensaje\": \"El texto proporcionado es demasiado ambiguo para extraer una tarea clara. Por favor, especifica qué necesitas hacer.\"}\n\nProcesa ahora el siguiente input del usuario:"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        976,
+        1605
+      ],
+      "id": "d4b430e4-b4b1-4d24-bb88-8a1e1f9a20f1",
+      "name": "Entradas tareas"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "=Eres un asistente especializado en clasificar mensajes de usuario para determinar en qué base de datos deben almacenarse los datos. Tu tarea es analizar el input del usuario y clasificarlo en una de las siguientes categorías. El output debe ser únicamente el nombre de la categoría seleccionada, sin formato JSON ni texto adicional.\n\n## Categorías disponibles:\n\n### 1. **Libros**\n- Cualquier cosa relacionada con lectura\n- Libros, novelas, cómics, manga, revistas\n- Menciones de leer, empezar a leer, terminar de leer\n- Autores, títulos, géneros literarios\n- **Ejemplos:** \"quiero leer...\", \"terminé el libro...\", \"empezar a leer...\"\n\n### 2. **Gastos**\n- Cualquier gasto de dinero o transacción económica\n- Compras, pagos, facturas, suscripciones\n- Menciones de precios, costos, dinero gastado, números\n- **Ejemplos:** \"compré...\", \"pagué...\", \"me costó...\", \"gasté...\", \"dia 5.7\"\n\n### 3. **Tareas**\n- Elementos de lista de tareas (TODO)\n- Actividades por hacer, recordatorios, pendientes\n- Objetivos, metas, cosas que completar\n- **Ejemplos:** \"tengo que...\", \"hacer...\", \"recordar...\", \"pendiente...\"\n\n### 4. **InteresCS**\n- Contenido de interés para Computer Science\n- Links a páginas web, recursos técnicos\n- Artículos, tutoriales, documentación\n- Herramientas, frameworks, tecnologías\n- **Ejemplos:** URLs, \"interesante para programación\", \"recurso útil\"\n\n### 5. **Otros**\n- Todo lo que no encaja en las categorías anteriores\n- Información general, notas personales\n- Contenido que no tiene una categoría específica\n- El mensaje empieza por Otros, otros u (otros)\n\n## Instrucciones:\n\n### 1. Análisis del texto:\n- Lee cuidadosamente el mensaje completo\n- Identifica palabras clave y contexto\n- Busca indicadores claros de la categoría\n\n### 2. Reglas de clasificación:\n- **Prioriza la intención principal** del mensaje\n- Si hay múltiples elementos, clasifica por el más prominente\n- En caso de duda entre dos categorías, elige la más específica\n- **SIEMPRE** debe haber una clasificación\n\n### 3. Formato de respuesta:\nResponde ÚNICAMENTE con el nombre de la categoría seleccionada. Las opciones válidas son:\n- Libros\n- Gastos\n- Tareas\n- InteresCS\n- Otros\n\n### 4. Reglas obligatorias:\n- **NUNCA** uses categorías que no estén en la lista\n- **NUNCA** agregues texto adicional, explicaciones o formato JSON\n- Si no estás seguro, usa \"Otros\" como fallback\n- Responde solo con una palabra: el nombre exacto de la categoría\n\n## Ejemplos:\n\n**Input:** \"Quiero empezar a leer Juego de Tronos\"\n**Output:** Libros\n\n**Input:** \"Compré café por 3.50€\"\n**Output:** Gastos\n\n**Input:** \"Tengo que llamar al dentista mañana\"\n**Output:** Tareas\n\n**Input:** \"https://reactjs.org - documentación oficial de React\"\n**Output:** InteresCS\n\n**Input:** \"otros Recordar llevar crema\"\n**Output:** Otros"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        380,
+        930
+      ],
+      "id": "3bc5e438-42e9-435b-b3d5-75b8a72c8274",
+      "name": "Reconoce db y text"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d72dcdc2-fa8d-4512-95f4-dca3bf72290a",
+              "name": "Nombre",
+              "value": "={{ JSON.parse($json.output).nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "b1e09b82-4711-4b04-928e-ad2c4b3b647f",
+              "name": "Precio",
+              "value": "={{ JSON.parse($json.output).precio }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1572,
+        1030
+      ],
+      "id": "210b0cfb-dfc5-45bf-ac13-5ade0dff4954",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d72dcdc2-fa8d-4512-95f4-dca3bf72290a",
+              "name": "Nombre",
+              "value": "={{ JSON.parse($json.output).nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "b1e09b82-4711-4b04-928e-ad2c4b3b647f",
+              "name": "Estado",
+              "value": "={{ JSON.parse($json.output).estado }}",
+              "type": "string"
+            },
+            {
+              "id": "558ecb0d-94ac-42ef-b5f6-065dc75e92e1",
+              "name": "Autores",
+              "value": "={{ JSON.parse($json.output).autores }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1572,
+        255
+      ],
+      "id": "73766ce4-6401-4210-a907-ca3edd495dff",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d72dcdc2-fa8d-4512-95f4-dca3bf72290a",
+              "name": "Nombre del sitio",
+              "value": "={{ JSON.parse($json.output).nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "b1e09b82-4711-4b04-928e-ad2c4b3b647f",
+              "name": "Descripción",
+              "value": "={{ JSON.parse($json.output).descripcion }}",
+              "type": "string"
+            },
+            {
+              "id": "09def7db-d4c0-484b-92b2-a9d654d9bbd4",
+              "name": "url",
+              "value": "={{ JSON.parse($json.output).url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1572,
+        1455
+      ],
+      "id": "31b387e3-d263-492f-aa88-85a7834052e0",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d72dcdc2-fa8d-4512-95f4-dca3bf72290a",
+              "name": "Nombre",
+              "value": "={{ JSON.parse($json.output).nombre }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1572,
+        1655
+      ],
+      "id": "79424127-2e87-4f52-93fb-575bea7145a9",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger').item.json.message.chat.id }}",
+        "text": "=Ha habido un error, por favor, inténtalo de nuevo siendo más preciso",
+        "additionalFields": {}
+      },
+      "id": "dc1509f4-4921-44b6-a22a-af5c6a8e8e41",
+      "name": "Error",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        1572,
+        755
+      ],
+      "webhookId": "[YOUR_WEBHOOK_ID_HERE]",
+      "credentials": {
+        "telegramApi": {
+          "id": "[YOUR_CREDENTIAL_ID_HERE]",
+          "name": "NotionBot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.message.chat.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        528,
+        1150
+      ],
+      "id": "35c51bcd-2835-439a-9803-ce1695a0a105",
+      "name": "Memory"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite-preview-06-17",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        408,
+        1150
+      ],
+      "id": "2e3dbdd3-683b-4ae5-bc67-6dae0c0813ff",
+      "name": "Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "[YOUR_CREDENTIAL_ID_HERE]",
+          "name": "jgm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite-preview-06-17",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1064,
+        400
+      ],
+      "id": "7c94ca07-47df-4e9a-b9bd-9a9cdc0c0aaf",
+      "name": "Gemini1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "[YOUR_CREDENTIAL_ID_HERE]",
+          "name": "jgm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite-preview-06-17",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1064,
+        800
+      ],
+      "id": "d5e9a0cf-c010-4f05-a41e-47b128f539d9",
+      "name": "Gemini2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "[YOUR_CREDENTIAL_ID_HERE]",
+          "name": "jgm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite-preview-06-17",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1064,
+        1300
+      ],
+      "id": "ba057a32-6601-4f50-96b3-692fe13c7d7f",
+      "name": "Gemini3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "[YOUR_CREDENTIAL_ID_HERE]",
+          "name": "jgm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite-preview-06-17",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1064,
+        1825
+      ],
+      "id": "2559ed42-8043-49d9-9c66-4e3f7bb4b216",
+      "name": "Gemini4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "[YOUR_CREDENTIAL_ID_HERE]",
+          "name": "jgm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const entradaOriginal = $('Trigger').first().json.message.text.trim(); // o tu fuente de texto\n\n// Normaliza el texto y elimina el prefijo si está presente\nconst textoLimpio = entradaOriginal.toLowerCase().startsWith(\"otros\")\n  ? entradaOriginal.slice(6).trim()\n  : entradaOriginal;\n\nreturn [\n  {\n    json: {\n      texto_limpio: textoLimpio\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1572,
+        1880
+      ],
+      "id": "74a7e418-8f07-4efa-ad1d-da57c974f257",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1c932146-fc63-4e9e-a96b-57c0bdfc4aa1",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "\"Información muy ambigua\"",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1352,
+        1180
+      ],
+      "id": "74ed5ccd-f6eb-4936-84ff-5ee403667d6a",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1c932146-fc63-4e9e-a96b-57c0bdfc4aa1",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "\"Información muy ambigua\"",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1352,
+        1605
+      ],
+      "id": "86e2cd0f-dd3b-4598-80d1-a0218a41d06d",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1c932146-fc63-4e9e-a96b-57c0bdfc4aa1",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "\"Información muy ambigua\"",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1352,
+        680
+      ],
+      "id": "81ce6bd3-9399-4094-afaf-b0a60c975b94",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1c932146-fc63-4e9e-a96b-57c0bdfc4aa1",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "\"Información muy ambigua\"",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1352,
+        280
+      ],
+      "id": "d0088439-1911-4d55-b174-b1611d5f560d",
+      "name": "If"
+    }
+  ],
+  "pinData": {
+    "Trigger": [
+      {
+        "json": {
+          "update_id": 65736936,
+          "message": {
+            "message_id": 386,
+            "from": {
+              "id": 7734649804,
+              "is_bot": false,
+              "first_name": "Jose",
+              "language_code": "es"
+            },
+            "chat": {
+              "id": 7734649804,
+              "first_name": "Jose",
+              "type": "private"
+            },
+            "date": 1751647480,
+            "text": "Modificar github con grpm"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Crear Entrada Libros": {
+      "main": [
+        [
+          {
+            "node": "Confirmar Guardado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Entrada Gastos": {
+      "main": [
+        [
+          {
+            "node": "Confirmar Guardado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Entrada InteresCS": {
+      "main": [
+        [
+          {
+            "node": "Confirmar Guardado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Entrada Tareas": {
+      "main": [
+        [
+          {
+            "node": "Confirmar Guardado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Entrada Otros": {
+      "main": [
+        [
+          {
+            "node": "Confirmar Guardado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger": {
+      "main": [
+        [
+          {
+            "node": "Reconoce db y text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Seleccionar la db": {
+      "main": [
+        [
+          {
+            "node": "Entradas libros",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Entradas gastos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Entradas InteresCS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Entradas tareas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Entradas libros": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Entradas gastos": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Entradas InteresCS": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Entradas tareas": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reconoce db y text": {
+      "main": [
+        [
+          {
+            "node": "Seleccionar la db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Crear Entrada Gastos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Crear Entrada Libros",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Crear Entrada InteresCS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Crear Entrada Tareas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Reconoce db y text",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Reconoce db y text",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Entradas libros",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Entradas gastos",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Entradas InteresCS",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Entradas tareas",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Crear Entrada Otros",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0a20f2ba-b503-42ac-a84a-39a99707885d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e3a372e759dca399c85b97e679ec99049c349db3699cbacbcd9c863910aa4ab3"
+  },
+  "id": "[YOUR_CREDENTIAL_ID_HERE]",
+  "tags": []
+}
