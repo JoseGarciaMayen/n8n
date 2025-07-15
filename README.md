@@ -8,6 +8,8 @@ This repository showcases a collection of n8n workflows designed to automate and
 
 ### Chatbot RAG
 
+![ChatbotRAG workflow image](assets/chatbotRAG.png)
+
 This workflow powers an intelligent **Retrieval Augmented Generation (RAG) chatbot**. It starts by processing a PDF document (e.g., `prueba_RAG.pdf`) from Google Drive. Using the **Gemini API**, the document's content is converted into **embeddings**, which are then stored in a Supabase table.
 
 The Supabase table should be created with the following structure:
@@ -24,9 +26,13 @@ CREATE TABLE documents (
 Once embedded, the chatbot can then respond to queries using the information directly from the PDF. It retrieves relevant embeddings and generates answers, serving as a powerful Q&A system via a customizable webhook, perfect for integrating into your website.
 
 ### Supermarket Comparing Bot
+![Supermarket Comparing workflow image](assets/SMComparer.png)
+
 This workflow features an AI agent designed to compare supermarket product prices. It ingests scraped product data from Mercadona and Dia, stored in a Supabase table. The AI agent then analyzes this data to provide a detailed comparison of the best products, using relevance classification to identify top recommendations. The comparison results are returned via a webhook, making it ideal for integration into a personal dashboard or notification system.
 
 ### Telegram Classifier & Notion Saver
+![Notion workflow image](assets/Notion.png)
+
 This n8n workflow transforms your Telegram into a smart productivity hub. It acts as a smart Telegram bot that revolutionizes how you save information into your Notion databases. Forget opening Notion manually—just send a message to your bot!
 
 The workflow intelligently classifies your input (e.g., a book you want to read, a new expense, a task to complete, or a valuable computer science resource). Leveraging AI, it then extracts key details from your message and automatically creates a new, organized entry in the corresponding Notion database. For example, simply message "I bought coffee for 3.50€," and the bot will instantly add it as a new expense. To ensure you're always in the loop, it even sends a confirmation message back to Telegram.
